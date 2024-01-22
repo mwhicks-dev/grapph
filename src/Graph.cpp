@@ -229,4 +229,8 @@ namespace grapph {
         return true;
     }
 
+    bool Graph::equals(Graph & candidate) {
+        return contains(candidate) && candidate.contains(*this);
+    }
+
 }

@@ -49,6 +49,8 @@ namespace grapph {
         bool spannedBy(Graph&);
         bool induces(Graph&);
 
+        bool equals(Graph&);
+
     };
 
 }
