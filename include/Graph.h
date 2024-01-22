@@ -1,7 +1,3 @@
-//
-// Created by Mason on 1/22/2024.
-//
-
 #ifndef GRAPPH_H
 #define GRAPPH_H
 
