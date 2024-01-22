@@ -28,7 +28,9 @@ namespace grapph {
     public:
 
         vertex_t addVertex();
+        vertex_t addVertex(vertex_t);
         edge_t addEdge(vertex_t, vertex_t);
+        edge_t addEdge(edge_t);
 
         bool adjacent(vertex_t, vertex_t);
         bool incident(vertex_t, edge_t);
