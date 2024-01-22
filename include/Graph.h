@@ -18,10 +18,10 @@ namespace grapph {
 
         std::map<vertex_t, std::set<vertex_t>> vertex_neighbors;
 
-        size_t num_vertices;
-        size_t num_edges;
+        size_t num_vertices = 0;
+        size_t num_edges = 0;
 
-        size_t next_vertex;
+        size_t next_vertex = 0;
 
         void validate(vertex_t);
 
@@ -33,7 +33,7 @@ namespace grapph {
         bool adjacent(vertex_t, vertex_t);
         bool incident(vertex_t, edge_t);
 
-        std::set<vertex_t> getNeigbors(vertex_t);
+        std::set<vertex_t> getNeighbors(vertex_t);
         size_t getDegree(vertex_t);
 
     };

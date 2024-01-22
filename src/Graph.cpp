@@ -80,7 +80,7 @@ namespace grapph {
         return vertex == edge.first || vertex == edge.second;
     }
 
-    std::set<vertex_t> Graph::getNeigbors(vertex_t vertex) {
+    std::set<vertex_t> Graph::getNeighbors(vertex_t vertex) {
         // Validate vertex
         validate(vertex);
 
