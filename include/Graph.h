@@ -21,6 +21,10 @@ namespace grapph {
         size_t num_vertices;
         size_t num_edges;
 
+        size_t next_vertex;
+
+        void validate(vertex_t);
+
     public:
 
         vertex_t addVertex();
@@ -29,7 +33,8 @@ namespace grapph {
         bool adjacent(vertex_t, vertex_t);
         bool incident(vertex_t, edge_t);
 
-        size_t degree(vertex_t);
+        std::set<vertex_t> getNeigbors(vertex_t);
+        size_t getDegree(vertex_t);
 
     };
 
