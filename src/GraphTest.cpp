@@ -9,25 +9,25 @@ TEST(GraphTest, TestK3BasicSetup) {
 
     // Add vertices
     grapph::vertex_t v0 = k3.addVertex();
-    grapph::vertex_t v1 = k3.addVertex();
+    grapph::vertex_t v1 = k3.addVertex(2);
     grapph::vertex_t v2 = k3.addVertex();
 
     // Add edges
-    grapph::edge_t e_0_1 = k3.addEdge(0, 1);
-    grapph::edge_t e_0_2 = k3.addEdge(0, 2);
-    grapph::edge_t e_1_2 = k3.addEdge(1, 2);
+    grapph::edge_t e_0_1 = k3.addEdge(0, 2);
+    grapph::edge_t e_0_2 = k3.addEdge(0, 3);
+    grapph::edge_t e_1_2 = k3.addEdge({2, 3});
 
     // Assertions
     ASSERT_EQ(0, v0);
-    ASSERT_EQ(1, v1);
-    ASSERT_EQ(2, v2);
+    ASSERT_EQ(2, v1);
+    ASSERT_EQ(3, v2);
 
     ASSERT_EQ(0, e_0_1.first);
-    ASSERT_EQ(1, e_0_1.second);
+    ASSERT_EQ(2, e_0_1.second);
     ASSERT_EQ(0, e_0_2.first);
-    ASSERT_EQ(2, e_0_2.second);
-    ASSERT_EQ(1, e_1_2.first);
-    ASSERT_EQ(2, e_1_2.second);
+    ASSERT_EQ(3, e_0_2.second);
+    ASSERT_EQ(2, e_1_2.first);
+    ASSERT_EQ(3, e_1_2.second);
 
     ASSERT_EQ(2, k3.getDegree(v0));
     ASSERT_EQ(2, k3.getDegree(v1));
