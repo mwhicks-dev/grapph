@@ -23,7 +23,8 @@ namespace grapph {
         std::set<edge_t> edge_space;
         for ( vertex_t i : vertices ) {
             for ( vertex_t j : vertices ) {
-                edge_space.insert({i, j});
+                if ( i <= j ) { edge_space.insert({i, j}); }
+
             }
         }
 
@@ -84,6 +85,11 @@ namespace grapph {
     }
 
     edge_t Graph::addEdge(edge_t edge) {
+        // Order edge
+        if ( edge.first > edge.second ) {
+            edge = { edge.second, edge.first };
+        }
+
         // Ensure vertices both in vertex set
         validate(edge.first);
         validate(edge.second);
