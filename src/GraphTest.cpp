@@ -60,3 +60,40 @@ TEST(GraphTest, TestK3BasicSetup) {
     ASSERT_THROW(k3.getNeighbors(4), std::invalid_argument);
 
 }
+
+TEST(GraphTest, TestK3SetBasedSetup) {
+
+    // Initialize graph
+    grapph::Graph k3({0, 2, 3}, {{0, 2}, {0, 3}, {2, 3}});
+
+    ASSERT_EQ(2, k3.getDegree(0));
+    ASSERT_EQ(2, k3.getDegree(2));
+    ASSERT_EQ(2, k3.getDegree(3));
+
+    ASSERT_TRUE(k3.adjacent(0, 2));
+    ASSERT_TRUE(k3.adjacent(0, 3));
+    ASSERT_TRUE(k3.adjacent(2, 3));
+
+    ASSERT_TRUE(k3.incident(0, {0, 2}));
+    ASSERT_TRUE(k3.incident(2, {0, 2}));
+    ASSERT_TRUE(k3.incident(0, {0, 3}));
+    ASSERT_TRUE(k3.incident(3, {0, 3}));
+    ASSERT_TRUE(k3.incident(2, {2, 3}));
+    ASSERT_TRUE(k3.incident(3, {2, 3}));
+
+    ASSERT_EQ(0, k3.getNeighbors(0).count(0));
+    ASSERT_EQ(1, k3.getNeighbors(0).count(2));
+    ASSERT_EQ(1, k3.getNeighbors(0).count(3));
+    ASSERT_EQ(1, k3.getNeighbors(2).count(0));
+    ASSERT_EQ(0, k3.getNeighbors(2).count(2));
+    ASSERT_EQ(1, k3.getNeighbors(2).count(3));
+    ASSERT_EQ(1, k3.getNeighbors(3).count(0));
+    ASSERT_EQ(1, k3.getNeighbors(3).count(2));
+    ASSERT_EQ(0, k3.getNeighbors(3).count(3));
+
+    ASSERT_THROW(k3.addEdge(0, 4), std::invalid_argument);
+    ASSERT_THROW(k3.adjacent(0, 4), std::invalid_argument);
+    ASSERT_THROW(k3.getDegree(4), std::invalid_argument);
+    ASSERT_THROW(k3.getNeighbors(4), std::invalid_argument);
+
+}
