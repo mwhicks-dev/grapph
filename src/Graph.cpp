@@ -17,6 +17,18 @@ namespace grapph {
         }
     }
 
+    Graph::Graph(std::set<vertex_t> vertices, std::set<edge_t> edges) {
+        // Add each vertex
+        for ( vertex_t vertex : vertices ) {
+            addVertex(vertex);
+        }
+
+        // Add each edge
+        for ( edge_t edge : edges ) {
+            addEdge(edge);
+        }
+    }
+
     vertex_t Graph::addVertex() {
         addVertex(next_vertex);
 

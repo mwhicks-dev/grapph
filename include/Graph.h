@@ -27,6 +27,9 @@ namespace grapph {
 
     public:
 
+        Graph() = default;
+        Graph(std::set<vertex_t>, std::set<edge_t>);
+
         vertex_t addVertex();
         vertex_t addVertex(vertex_t);
         edge_t addEdge(vertex_t, vertex_t);
