@@ -23,8 +23,6 @@ namespace grapph {
 
     public:
 
-        Graph();
-
         vertex_t addVertex();
         edge_t addEdge(vertex_t, vertex_t);
 
