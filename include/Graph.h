@@ -25,6 +25,8 @@ namespace grapph {
 
         void validate(vertex_t);
 
+        std::set<edge_t> getEdgeSpace();
+
     public:
 
         Graph() = default;
@@ -40,6 +42,12 @@ namespace grapph {
 
         std::set<vertex_t> getNeighbors(vertex_t);
         size_t getDegree(vertex_t);
+
+        Graph induce(std::set<vertex_t>&);
+
+        bool contains(Graph&);
+        bool spannedBy(Graph&);
+        bool induces(Graph&);
 
     };
 
