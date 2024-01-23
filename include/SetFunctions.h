@@ -43,7 +43,7 @@ namespace grapph {
     }
 
     template <typename T>
-    static bool containedBy(std::set<T>& sub, std::set<T>& super) {
+    static bool setContains(std::set<T>& super, std::set<T>& sub) {
         for ( T t : sub ) {
             if ( super.count(t) == 0 )  return false;
         }
@@ -52,8 +52,8 @@ namespace grapph {
     }
 
     template <typename T>
-    static bool equals(std::set<T>& a, std::set<T>& b) {
-        return containedBy(a, b) && containedBy(b, a);
+    static bool setEquals(std::set<T>& a, std::set<T>& b) {
+        return setContains(a, b) && setContains(b, a);
     }
 
 }
