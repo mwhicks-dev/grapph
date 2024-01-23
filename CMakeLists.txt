@@ -5,10 +5,6 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(include)
 
-add_executable(grapph
-        include/Graph.h
-        src/Graph.cpp)
-
 include(FetchContent)
 FetchContent_Declare(
         googletest
