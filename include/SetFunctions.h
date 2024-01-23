@@ -42,6 +42,20 @@ namespace grapph {
         return set_difference;
     }
 
+    template <typename T>
+    static bool containedBy(std::set<T>& sub, std::set<T>& super) {
+        for ( T t : sub ) {
+            if ( super.count(t) == 0 )  return false;
+        }
+
+        return true;
+    }
+
+    template <typename T>
+    static bool equals(std::set<T>& a, std::set<T>& b) {
+        return containedBy(a, b) && containedBy(b, a);
+    }
+
 }
 
 #endif //GRAPPH_SETFUNCTIONS_H
