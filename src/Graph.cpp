@@ -99,7 +99,8 @@ namespace grapph {
             throw std::invalid_argument("Edge already added");
         }
 
-        // Increment number of edges by 1
+        // Add edge to edge set
+        edges.insert(edge);
         num_edges++;
 
         // Add vertices to each others' incidence lists
