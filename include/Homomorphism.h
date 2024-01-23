@@ -22,19 +22,22 @@ namespace grapph {
 
         void validate();
 
-        bool isInjective();
-        bool isSurjective();
-
     public:
 
         Homomorphism(Graph&, Graph&, vfunc_t, efunc_t);
 
-        bool isIsomorphism();
+        Graph& getFromGraph() { return from; }
+        Graph& getToGraph() { return to; }
+
+        vfunc_t getVertexHomomorphism() { return vertex_map; }
+        efunc_t getEdgeHomomorphism() { return edge_map; }
+
+        bool isInjective();
+        bool isSurjective();
+        bool isBijective();
 
     };
 
-    static vfunc_t compose(vfunc_t, vfunc_t);
-    static efunc_t compose(efunc_t, efunc_t);
     static Homomorphism compose(Homomorphism, Homomorphism);
 
 }
