@@ -176,60 +176,22 @@ namespace grapph {
     }
 
     bool Graph::contains(Graph & subgraph_candidate) {
-        // Check if each subgraph vertex in graph
-        for ( vertex_t subgraph_vertex : subgraph_candidate.vertices ) {
-            if ( vertices.count(subgraph_vertex) == 0 ) {
-                return false;
-            }
-        }
-
-        // Check if each subgraph edge in graph
-        for ( edge_t subgraph_edge : subgraph_candidate.edges ) {
-            if ( edges.count(subgraph_edge) == 0 ) {
-                return false;
-            }
-        }
-
-        return true;
+        return setContains(vertices, subgraph_candidate.vertices)
+                && setContains(edges, subgraph_candidate.edges);
     }
 
     bool Graph::spannedBy(Graph & subgraph_candidate) {
-        // Check if each graph vertex in subgraph
-        if ( num_vertices != subgraph_candidate.num_vertices ) { return false; }
-        for ( vertex_t vertex : vertices ) {
-            if ( subgraph_candidate.vertices.count( vertex ) == 0 ) {
-                return false;
-            }
-        }
-
-        // Check if each subgraph edge in graph
-        for ( edge_t subgraph_edge : subgraph_candidate.edges ) {
-            if ( edges.count(subgraph_edge) == 0 ) {
-                return false;
-            }
-        }
-
-        return true;
+        return setEquals(vertices, subgraph_candidate.vertices)
+                && setContains(edges, subgraph_candidate.edges);
     }
 
     bool Graph::induces(Graph & induced_subgraph_candidate) {
-        // Check if each subgraph vertex in graph
-        for ( vertex_t subgraph_vertex : induced_subgraph_candidate.vertices ) {
-            if ( vertices.count(subgraph_vertex) == 0 ) {
-                return false;
-            }
-        }
-
-        // Generate edge space
+        // Generate edge space and necessary induced subgraph edges
         std::set<edge_t> edge_space = getEdgeSpace(induced_subgraph_candidate.vertices);
         std::set<edge_t> induced_subgraph_edges = setIntersection(edges, edge_space);
 
-        // Verify induced subgraph candidate has necessary edges
-        for ( edge_t edge : induced_subgraph_edges ) {
-            if ( induced_subgraph_candidate.edges.count( edge ) == 0 )  return false;
-        }
-
-        return true;
+        return setContains(vertices, induced_subgraph_candidate.vertices)
+                && setEquals(induced_subgraph_edges, induced_subgraph_candidate.edges);
     }
 
     bool Graph::equals(Graph & candidate) {
