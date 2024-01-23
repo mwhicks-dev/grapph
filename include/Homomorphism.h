@@ -9,7 +9,6 @@ namespace grapph {
 
     typedef std::map<vertex_t, vertex_t>    vfunc_t;
     typedef std::map<edge_t, edge_t>        efunc_t;
-    typedef std::pair<vfunc_t, efunc_t>     homomorphism_t;
 
     class Homomorphism {
 
