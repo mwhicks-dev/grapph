@@ -40,6 +40,9 @@ namespace grapph {
 
     static Homomorphism compose(Homomorphism, Homomorphism);
 
+    template <typename T>
+    static bool isInvariant(Graph&, Graph&, T (*)(Graph&));
+
 }
 
 #endif //GRAPPH_HOMOMORPHISM_H

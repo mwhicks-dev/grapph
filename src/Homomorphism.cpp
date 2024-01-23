@@ -118,4 +118,12 @@ namespace grapph {
         return composed;
     }
 
+    template <typename T>
+    bool isInvariant(Graph& a, Graph& b, T (*func)(Graph&)) {
+        T aT = func(a);
+        T bT = func(b);
+
+        return aT == bT;
+    }
+
 }
