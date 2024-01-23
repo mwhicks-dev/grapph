@@ -4,13 +4,13 @@ CCFLAGS = -shared
 DFLAGS =
 
 LIB_NAME = libgrapph
-LIB_VERSION = 0.1.0
+LIB_VERSION = 0.2.1
 
 SRC_FOLDER = src
 OBJ_FOLDER = obj
 BIN_FOLDER = bin
 
-ALL_NAMES = Graph.o
+ALL_NAMES = Graph.o Homomorphism.o
 ALL_OBJS = $(foreach obj, $(ALL_NAMES), $(OBJ_FOLDER)/$(obj))
 
 libgrapph: setup $(ALL_OBJS)
