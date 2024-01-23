@@ -115,3 +115,85 @@ TEST(GraphTest, TestK3SetBasedSetup) {
     ASSERT_THROW(k3.getNeighbors(4), std::invalid_argument);
 
 }
+
+TEST(GraphTest, TestInduce1) {
+
+    // Initialize parent graph
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2, 3, 4 };
+    std::set<grapph::edge_t> edges = { {0, 1}, {0, 2}, {0, 3}, {0, 4} };
+    grapph::Graph s4(vertices, edges);
+
+    // Induce subgraph
+    std::set<grapph::vertex_t> induced_vertices = { 0, 1, 2, 3 };
+    std::set<grapph::edge_t> induced_edges = { {0, 1}, {0, 2}, {0, 3} };
+    grapph::Graph induced = s4.induce(induced_vertices);
+
+    std::set<grapph::vertex_t> actual_vertices = induced.getVertices();
+    std::set<grapph::edge_t> actual_edges = induced.getEdges();
+
+    // Assertions
+    ASSERT_TRUE(s4.contains(induced));
+    ASSERT_TRUE(s4.induces(induced));
+
+    ASSERT_TRUE(grapph::setEquals(induced_vertices, actual_vertices));
+    ASSERT_TRUE(grapph::setEquals(induced_edges, actual_edges));
+
+}
+
+TEST(GraphTest, TestInduce2) {
+
+    // Initialize parent graph
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2, 3, 4 };
+    std::set<grapph::edge_t> edges = { {0, 1}, {0, 2}, {0, 3}, {0, 4} };
+    grapph::Graph s4(vertices, edges);
+
+    // Induce subgraph
+    std::set<grapph::vertex_t> induced_vertices = { 1, 2, 3, 4 };
+    std::set<grapph::edge_t> induced_edges = {};
+    grapph::Graph induced = s4.induce(induced_vertices);
+
+    std::set<grapph::vertex_t> actual_vertices = induced.getVertices();
+    std::set<grapph::edge_t> actual_edges = induced.getEdges();
+
+    // Assertions
+    ASSERT_TRUE(s4.contains(induced));
+    ASSERT_TRUE(s4.induces(induced));
+
+    ASSERT_TRUE(grapph::setEquals(induced_vertices, actual_vertices));
+    ASSERT_TRUE(grapph::setEquals(induced_edges, actual_edges));
+
+}
+
+TEST(GraphTest, TestInduce3) {
+    // Initialize parent graph
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2, 3, 4 };
+    std::set<grapph::edge_t> edges = { {0, 1}, {0, 2}, {0, 3}, {0, 4} };
+    grapph::Graph s4(vertices, edges);
+
+    std::set<grapph::vertex_t> induced_vertices = { 0, 2, 4, 6 };
+
+    // Assertions
+    ASSERT_THROW(s4.induce(induced_vertices), std::invalid_argument);
+}
+
+TEST(GraphTest, TestInducesEmpty) {
+    // Initialize parent graph
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2, 3, 4 };
+    std::set<grapph::edge_t> edges = { {0, 1}, {0, 2}, {0, 3}, {0, 4} };
+    grapph::Graph s4(vertices, edges);
+
+    // Induce blank subgraph
+    std::set<grapph::vertex_t> induced_vertices = {};
+    std::set<grapph::edge_t> induced_edges = {};
+    grapph::Graph induced = s4.induce(induced_vertices);
+
+    std::set<grapph::vertex_t> actual_vertices = induced.getVertices();
+    std::set<grapph::edge_t> actual_edges = induced.getEdges();
+
+    // Assertions
+    ASSERT_TRUE(s4.contains(induced));
+    ASSERT_TRUE(s4.induces(induced));
+
+    ASSERT_TRUE(grapph::setEquals(induced_vertices, actual_vertices));
+    ASSERT_TRUE(grapph::setEquals(induced_edges, actual_edges));
+}
