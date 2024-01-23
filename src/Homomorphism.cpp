@@ -99,7 +99,7 @@ namespace grapph {
         return isInjective() && isSurjective();
     }
 
-    Homomorphism compose(Homomorphism first, Homomorphism second) {
+    Homomorphism Homomorphism::compose(Homomorphism first, Homomorphism second) {
         // Compose vertex homomorphisms
         vfunc_t vertex_map_composition;
         for ( std::pair<vertex_t, vertex_t> mapping : first.getVertexHomomorphism() ) {
@@ -116,14 +116,6 @@ namespace grapph {
         Homomorphism composed = Homomorphism(first.getFromGraph(), second.getToGraph(),
                                              vertex_map_composition, edge_map_composition);
         return composed;
-    }
-
-    template <typename T>
-    bool isInvariant(Graph& a, Graph& b, T (*func)(Graph&)) {
-        T aT = func(a);
-        T bT = func(b);
-
-        return aT == bT;
     }
 
 }

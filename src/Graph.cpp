@@ -198,4 +198,12 @@ namespace grapph {
         return contains(candidate) && candidate.contains(*this);
     }
 
+    template <typename T>
+    bool Graph::isInvariant(Graph& a, Graph& b, T (*func)(Graph&)) {
+        T aT = func(a);
+        T bT = func(b);
+
+        return aT == bT;
+    }
+
 }

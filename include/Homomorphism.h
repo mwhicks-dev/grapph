@@ -36,12 +36,9 @@ namespace grapph {
         bool isSurjective();
         bool isBijective();
 
+        static Homomorphism compose(Homomorphism, Homomorphism);
+
     };
-
-    static Homomorphism compose(Homomorphism, Homomorphism);
-
-    template <typename T>
-    static bool isInvariant(Graph&, Graph&, T (*)(Graph&));
 
 }
 

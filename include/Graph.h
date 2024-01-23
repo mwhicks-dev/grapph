@@ -54,6 +54,9 @@ namespace grapph {
 
         bool equals(Graph&);
 
+        template <typename T>
+        static bool isInvariant(Graph&, Graph&, T (*)(Graph&));
+
     };
 
 }
