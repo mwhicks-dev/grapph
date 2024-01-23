@@ -167,12 +167,7 @@ namespace grapph {
         // Else, return new induced subgraph
         std::set<edge_t> edge_space = getEdgeSpace(vertex_subset);
         Graph induced_subgraph(vertex_subset, setIntersection(edges, edge_space));
-        for ( edge_t edge : edges ) {
-            if ( vertex_subset.count(edge.first) != 0
-                    && vertex_subset.count(edge.second) != 0 ) {
-                induced_subgraph.addEdge(edge);
-            }
-        }
+
         return induced_subgraph;
     }
 
