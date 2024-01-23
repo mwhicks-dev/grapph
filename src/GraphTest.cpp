@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "Graph.h"
+#include "SetFunctions.h"
 
 TEST(GraphTest, TestK3BasicSetup) {
 
@@ -11,11 +12,15 @@ TEST(GraphTest, TestK3BasicSetup) {
     grapph::vertex_t v0 = k3.addVertex();
     grapph::vertex_t v1 = k3.addVertex(2);
     grapph::vertex_t v2 = k3.addVertex();
+    std::set<grapph::vertex_t> vertices = { v0, v1, v2 };
+    std::set<grapph::vertex_t> vertex_set = k3.getVertices();
 
     // Add edges
     grapph::edge_t e_0_1 = k3.addEdge(0, 2);
     grapph::edge_t e_0_2 = k3.addEdge(0, 3);
     grapph::edge_t e_1_2 = k3.addEdge({2, 3});
+    std::set<grapph::edge_t> edges = { e_0_1, e_0_2, e_1_2 };
+    std::set<grapph::edge_t> edge_set = k3.getEdges();
 
     // Assertions
     ASSERT_EQ(0, v0);
@@ -28,6 +33,12 @@ TEST(GraphTest, TestK3BasicSetup) {
     ASSERT_EQ(3, e_0_2.second);
     ASSERT_EQ(2, e_1_2.first);
     ASSERT_EQ(3, e_1_2.second);
+
+    ASSERT_TRUE(grapph::setEquals(vertices, vertex_set));
+    EXPECT_TRUE(grapph::setContains(edges, edge_set));
+    EXPECT_TRUE(grapph::setContains(edge_set, edges));
+    EXPECT_EQ(3, edge_set.size());
+    ASSERT_TRUE(grapph::setEquals(edges, edge_set));
 
     ASSERT_EQ(2, k3.getDegree(v0));
     ASSERT_EQ(2, k3.getDegree(v1));
@@ -64,7 +75,14 @@ TEST(GraphTest, TestK3BasicSetup) {
 TEST(GraphTest, TestK3SetBasedSetup) {
 
     // Initialize graph
-    grapph::Graph k3({0, 2, 3}, {{0, 2}, {0, 3}, {2, 3}});
+    std::set<grapph::vertex_t> vertices = { 0, 2, 3 };
+    std::set<grapph::edge_t> edges = {{0, 2}, {0, 3}, {2, 3}};
+    grapph::Graph k3(vertices, edges);
+    std::set<grapph::vertex_t> vertex_set = k3.getVertices();
+    std::set<grapph::edge_t> edge_set = k3.getEdges();
+
+    ASSERT_TRUE(grapph::setEquals(vertices, vertex_set));
+    ASSERT_TRUE(grapph::setEquals(edges, edge_set));
 
     ASSERT_EQ(2, k3.getDegree(0));
     ASSERT_EQ(2, k3.getDegree(2));
