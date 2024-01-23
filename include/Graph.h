@@ -25,7 +25,7 @@ namespace grapph {
 
         void validate(vertex_t);
 
-        std::set<edge_t> getEdgeSpace();
+        static std::set<edge_t> getEdgeSpace(std::set<vertex_t>&);
 
     public:
 

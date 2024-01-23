@@ -1,11 +1,10 @@
 #include "Graph.h"
+#include "SetFunctions.h"
 
 #include <iostream>
 #include <sstream>
 
 #include <stdexcept>
-
-#include <algorithm>
 
 namespace grapph {
 
@@ -19,10 +18,10 @@ namespace grapph {
         }
     }
 
-    std::set<edge_t> Graph::getEdgeSpace() {
+    std::set<edge_t> Graph::getEdgeSpace(std::set<vertex_t>& vertex_set) {
         std::set<edge_t> edge_space;
-        for ( vertex_t i : vertices ) {
-            for ( vertex_t j : vertices ) {
+        for ( vertex_t i : vertex_set ) {
+            for ( vertex_t j : vertex_set ) {
                 if ( i <= j ) { edge_space.insert({i, j}); }
 
             }
@@ -165,7 +164,8 @@ namespace grapph {
         }
 
         // Else, return new induced subgraph
-        Graph induced_subgraph(vertex_subset, {});
+        std::set<edge_t> edge_space = getEdgeSpace(vertex_subset);
+        Graph induced_subgraph(vertex_subset, setIntersection(edges, edge_space));
         for ( edge_t edge : edges ) {
             if ( vertex_subset.count(edge.first) != 0
                     && vertex_subset.count(edge.second) != 0 ) {
@@ -221,15 +221,12 @@ namespace grapph {
         }
 
         // Generate edge space
-        std::set<edge_t> edge_space = induced_subgraph_candidate.getEdgeSpace();
+        std::set<edge_t> edge_space = getEdgeSpace(induced_subgraph_candidate.vertices);
+        std::set<edge_t> induced_subgraph_edges = setIntersection(edges, edge_space);
 
-
-        // Check for each edge in edge space that graph contains => subgraph contains
-        for ( edge_t edge : edge_space ) {
-            if ( edges.count( edge ) != 0
-                    && induced_subgraph_candidate.edges.count( edge ) == 0 ) {
-                return false;
-            }
+        // Verify induced subgraph candidate has necessary edges
+        for ( edge_t edge : induced_subgraph_edges ) {
+            if ( induced_subgraph_candidate.edges.count( edge ) == 0 )  return false;
         }
 
         return true;
