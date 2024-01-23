@@ -43,6 +43,9 @@ namespace grapph {
         std::set<vertex_t> getNeighbors(vertex_t);
         size_t getDegree(vertex_t);
 
+        std::set<vertex_t> getVertices() { return vertices; }
+        std::set<edge_t> getEdges() { return edges; }
+
         Graph induce(std::set<vertex_t>&);
 
         bool contains(Graph&);
