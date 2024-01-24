@@ -13,8 +13,8 @@ BIN_FOLDER = bin
 ALL_NAMES = Graph.o Homomorphism.o
 ALL_OBJS = $(foreach obj, $(ALL_NAMES), $(OBJ_FOLDER)/$(obj))
 
-libgrapph: setup $(ALL_OBJS)
-	$(info -> compiling library)
+lib: setup $(ALL_OBJS)
+	$(info -> compiling libgrapph)
 	$(CCC) $(CFLAGS) $(CCFLAGS) -o $(BIN_FOLDER)/$(LIB_NAME)_$(LIB_VERSION).a $(ALL_OBJS)
 
 setup:
