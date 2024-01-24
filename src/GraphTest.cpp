@@ -3,6 +3,9 @@
 #include "Graph.h"
 #include "SetFunctions.h"
 
+#include <algorithm>
+#include <cstdlib>
+
 TEST(GraphTest, TestK3BasicSetup) {
 
     // Initialize graph
@@ -254,4 +257,85 @@ TEST(GraphTest, TestEquals) {
     ASSERT_FALSE(iso_s4.equals(s4));
     ASSERT_FALSE(eq_s4.equals(iso_s4));
     ASSERT_FALSE(iso_s4.equals(eq_s4));
+}
+
+size_t count_vertices(grapph::Graph & graph) { return graph.getVertices().size(); }
+
+size_t count_edges(grapph::Graph & graph) { return graph.getEdges().size(); }
+
+std::vector<size_t> degree_score(grapph::Graph & graph) {
+    std::vector<size_t> degree_score;
+
+    for ( grapph::vertex_t v : graph.getVertices() ) {
+        degree_score.push_back( graph.getNeighbors(v).size() );
+    }
+
+    std::sort(degree_score.begin(), degree_score.end());
+
+    return degree_score;
+}
+
+bool contains_triangle(grapph::Graph & graph) {
+    std::set<grapph::vertex_t> vertices = graph.getVertices();
+    size_t number_of_vertices = vertices.size();
+
+    for ( grapph::vertex_t vi : vertices ) {
+        for ( grapph::vertex_t vj : vertices ) {
+            for ( grapph::vertex_t vk : vertices ) {
+                if ( vi != vj && vi != vk ) {
+                    std::set<grapph::vertex_t> triangle_vertices = {vi, vj, vk};
+                    std::set<grapph::edge_t> triangle_edges = grapph::Graph::getEdgeSpace(triangle_vertices);
+                    grapph::Graph triangle(triangle_vertices, triangle_edges);
+                    if ( graph.contains(triangle) )  return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+TEST(GraphTest, TestInvariants) {
+    // Initialize parent graph
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2, 3, 4, 5, 6 };
+    std::set<grapph::edge_t> edges = { {0, 1}, {1, 2}, {2, 3},
+                                       {3, 4}, {4, 0}, {3, 5}, {4, 6} };
+    grapph::Graph pentagon_with_tails(vertices, edges);
+
+    // Create a random isomorphism on 7 vertices
+    std::set<grapph::vertex_t> range;
+    std::map<grapph::vertex_t, grapph::vertex_t> isomorphism;
+    for ( grapph::vertex_t v : vertices ) {
+        size_t mapping;
+        do {
+            mapping = std::rand();
+        } while ( range.count(mapping) == 1 );
+        isomorphism[v] = mapping;
+        range.insert(mapping);
+    }
+
+    // Initialize isomorphic graph
+    std::set<grapph::edge_t> isomorphic_edges;
+    for ( grapph::edge_t edge : edges ) {
+        isomorphic_edges.insert({isomorphism[edge.first], isomorphism[edge.second]});
+    }
+    grapph::Graph iso_pwt(range, isomorphic_edges);
+
+    // Initialize non-isomorphic supergraph of graph with chord
+    std::set<grapph::edge_t> chord = {{1,4}};
+    chord = grapph::setUnion(edges, chord);
+    grapph::Graph chord_pwt(vertices, chord);
+
+    // Assertions
+    ASSERT_TRUE(grapph::Graph::isInvariant<size_t>(pentagon_with_tails, iso_pwt, count_vertices));
+    ASSERT_TRUE(grapph::Graph::isInvariant<size_t>(pentagon_with_tails, iso_pwt, count_edges));
+    ASSERT_TRUE(grapph::Graph::isInvariant<bool>(pentagon_with_tails, iso_pwt, contains_triangle));
+    ASSERT_TRUE(grapph::Graph::isInvariant<size_t>(pentagon_with_tails, chord_pwt, count_vertices));
+    ASSERT_FALSE(grapph::Graph::isInvariant<size_t>(pentagon_with_tails, chord_pwt, count_edges));
+    EXPECT_TRUE(contains_triangle(chord_pwt));
+    EXPECT_FALSE(contains_triangle(pentagon_with_tails));
+    ASSERT_FALSE(grapph::Graph::isInvariant<bool>(pentagon_with_tails, chord_pwt, contains_triangle));
+    ASSERT_TRUE(grapph::Graph::isInvariant<size_t>(iso_pwt, chord_pwt, count_vertices));
+    ASSERT_FALSE(grapph::Graph::isInvariant<size_t>(iso_pwt, chord_pwt, count_edges));
+    ASSERT_FALSE(grapph::Graph::isInvariant<bool>(iso_pwt, chord_pwt, contains_triangle));
 }
