@@ -197,3 +197,61 @@ TEST(GraphTest, TestInducesEmpty) {
     ASSERT_TRUE(grapph::setEquals(induced_vertices, actual_vertices));
     ASSERT_TRUE(grapph::setEquals(induced_edges, actual_edges));
 }
+
+TEST(GraphTest, TestSpanning1) {
+    // Initialize parent graph
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2, 3, 4, 5, 6 };
+    std::set<grapph::edge_t> edges = { {0, 1}, {1, 2}, {2, 3},
+                                       {3, 4}, {4, 0}, {3, 5}, {4, 6} };
+    grapph::Graph pentagon_with_tails(vertices, edges);
+
+    // Initialize spanning subgraph
+    std::set<grapph::edge_t> subgraph_edges = { {0, 1}, {1, 2}, {2, 3},
+                                                {3, 4}, {3, 5}, {4, 6} };
+    grapph::Graph subgraph_with_tails(vertices, subgraph_edges);
+
+    // Assertions
+    ASSERT_TRUE(pentagon_with_tails.contains(subgraph_with_tails));
+    ASSERT_TRUE(pentagon_with_tails.spannedBy(subgraph_with_tails));
+    ASSERT_FALSE(pentagon_with_tails.equals(subgraph_with_tails));
+}
+
+TEST(GraphTest, TestSpanning2) {
+    // Initialize parent graph
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2, 3, 4, 5, 6 };
+    std::set<grapph::edge_t> edges = { {0, 1}, {1, 2}, {2, 3},
+                                       {3, 4}, {4, 0}, {3, 5}, {4, 6} };
+    grapph::Graph pentagon_with_tails(vertices, edges);
+
+    // Initialize spanning subgraph
+    std::set<grapph::edge_t> subgraph_edges = {};
+    grapph::Graph empty_spanning_subgraph(vertices, subgraph_edges);
+
+    // Assertions
+    ASSERT_TRUE(pentagon_with_tails.contains(empty_spanning_subgraph));
+    ASSERT_TRUE(pentagon_with_tails.spannedBy(empty_spanning_subgraph));
+    ASSERT_FALSE(pentagon_with_tails.equals(empty_spanning_subgraph));
+}
+
+TEST(GraphTest, TestEquals) {
+    // Initialize parent graph
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2, 3, 4 };
+    std::set<grapph::edge_t> edges = { {0, 1}, {0, 2}, {0, 3}, {0, 4} };
+    grapph::Graph s4(vertices, edges);
+
+    // Initialize equal graph
+    std::set<grapph::edge_t> equal_edges = { {1, 0}, {2, 0}, {3, 0}, {4, 0} };
+    grapph::Graph eq_s4(vertices, equal_edges);
+
+    // Initialize isomorphic, but not equal, graph
+    std::set<grapph::edge_t> isomorphic_edges = { {0, 1}, {2, 1}, {3, 1}, {4, 1} };
+    grapph::Graph iso_s4(vertices, isomorphic_edges);
+
+    // Assertions
+    ASSERT_TRUE(s4.equals(eq_s4));
+    ASSERT_TRUE(eq_s4.equals(s4));
+    ASSERT_FALSE(s4.equals(iso_s4));
+    ASSERT_FALSE(iso_s4.equals(s4));
+    ASSERT_FALSE(eq_s4.equals(iso_s4));
+    ASSERT_FALSE(iso_s4.equals(eq_s4));
+}
