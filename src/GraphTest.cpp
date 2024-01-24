@@ -259,6 +259,18 @@ TEST(GraphTest, TestEquals) {
     ASSERT_FALSE(iso_s4.equals(eq_s4));
 }
 
+TEST(GraphTest, TestEdgeSpace) {
+    // Initialize...
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2 };
+    std::set<grapph::edge_t> edges = grapph::Graph::getEdgeSpace(vertices);
+
+    // Assertions
+    ASSERT_EQ(3, edges.size());
+    ASSERT_EQ(1, edges.count({ 0, 1 }));
+    ASSERT_EQ(1, edges.count({ 0, 2 }));
+    ASSERT_EQ(1, edges.count({ 1, 2 }));
+}
+
 size_t count_vertices(grapph::Graph & graph) { return graph.getVertices().size(); }
 
 size_t count_edges(grapph::Graph & graph) { return graph.getEdges().size(); }
@@ -277,12 +289,11 @@ std::vector<size_t> degree_score(grapph::Graph & graph) {
 
 bool contains_triangle(grapph::Graph & graph) {
     std::set<grapph::vertex_t> vertices = graph.getVertices();
-    size_t number_of_vertices = vertices.size();
 
     for ( grapph::vertex_t vi : vertices ) {
         for ( grapph::vertex_t vj : vertices ) {
             for ( grapph::vertex_t vk : vertices ) {
-                if ( vi != vj && vi != vk ) {
+                if ( vi != vj && vi != vk && vj != vk ) {
                     std::set<grapph::vertex_t> triangle_vertices = {vi, vj, vk};
                     std::set<grapph::edge_t> triangle_edges = grapph::Graph::getEdgeSpace(triangle_vertices);
                     grapph::Graph triangle(triangle_vertices, triangle_edges);
