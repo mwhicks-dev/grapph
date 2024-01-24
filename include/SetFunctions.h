@@ -36,7 +36,7 @@ namespace grapph {
         std::set<T> set_difference;
 
         for ( T t : minuend ) {
-            if ( subtrahend.count(t) )  set_difference.insert(t);
+            if ( subtrahend.count(t) == 0 )  set_difference.insert(t);
         }
 
         return set_difference;
