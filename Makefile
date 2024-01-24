@@ -4,7 +4,7 @@ CCFLAGS = -shared
 DFLAGS =
 
 LIB_NAME = libgrapph
-LIB_VERSION = 0.2.3
+LIB_VERSION = 0.2.4
 
 SRC_FOLDER = src
 OBJ_FOLDER = obj
