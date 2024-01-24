@@ -25,8 +25,6 @@ namespace grapph {
 
         void validate(vertex_t);
 
-        static std::set<edge_t> getEdgeSpace(std::set<vertex_t>&);
-
     public:
 
         Graph() = default;
@@ -54,8 +52,15 @@ namespace grapph {
 
         bool equals(Graph&);
 
+        static std::set<edge_t> getEdgeSpace(std::set<vertex_t>&);
+
         template <typename T>
-        static bool isInvariant(Graph&, Graph&, T (*)(Graph&));
+        static bool isInvariant(Graph& a, Graph& b, T (*func)(Graph&)) {
+            T aT = func(a);
+            T bT = func(b);
+
+            return aT == bT;
+        }
 
     };
 

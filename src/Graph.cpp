@@ -18,18 +18,6 @@ namespace grapph {
         }
     }
 
-    std::set<edge_t> Graph::getEdgeSpace(std::set<vertex_t>& vertex_set) {
-        std::set<edge_t> edge_space;
-        for ( vertex_t i : vertex_set ) {
-            for ( vertex_t j : vertex_set ) {
-                if ( i <= j ) { edge_space.insert({i, j}); }
-
-            }
-        }
-
-        return edge_space;
-    }
-
     Graph::Graph(std::set<vertex_t> vertices, std::set<edge_t> edges) {
         // Add each vertex
         for ( vertex_t vertex : vertices ) {
@@ -194,12 +182,16 @@ namespace grapph {
         return contains(candidate) && candidate.contains(*this);
     }
 
-    template <typename T>
-    bool Graph::isInvariant(Graph& a, Graph& b, T (*func)(Graph&)) {
-        T aT = func(a);
-        T bT = func(b);
+    std::set<edge_t> Graph::getEdgeSpace(std::set<vertex_t>& vertex_set) {
+        std::set<edge_t> edge_space;
+        for ( vertex_t i : vertex_set ) {
+            for ( vertex_t j : vertex_set ) {
+                if ( i < j ) { edge_space.insert({i, j}); }
 
-        return aT == bT;
+            }
+        }
+
+        return edge_space;
     }
 
 }
