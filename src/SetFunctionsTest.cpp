@@ -44,3 +44,39 @@ TEST(SetFunctionsTest, TestSetEquals3) {
     ASSERT_FALSE(grapph::setEquals(d1, d2));
 
 }
+
+TEST(SetFunctionsTest, TestSetContainment1) {
+
+    // Create two size_t sets with containment relation
+    std::set<size_t> sub = { 0, 1 };
+    std::set<size_t> sup = { 0, 1, 2, 3 };
+
+    // Assertions
+    ASSERT_TRUE(grapph::setContains(sup, sub));
+    ASSERT_FALSE(grapph::setContains(sub, sup));
+
+}
+
+TEST(SetFunctionsTest, TestSetContainment2) {
+
+    // Create two bool sets with containment relation
+    std::set<bool> sub = { false };
+    std::set<bool> sup = { true, false };
+
+    // Assertions
+    ASSERT_TRUE(grapph::setContains(sup, sub));
+    ASSERT_FALSE(grapph::setContains(sub, sup));
+
+}
+
+TEST(SetFunctionsTest, TestSetContainment3) {
+
+    // Create two bool sets with containment relation
+    std::set<bool> sub = {};
+    std::set<bool> sup = { true, false };
+
+    // Assertions
+    ASSERT_TRUE(grapph::setContains(sup, sub));
+    ASSERT_FALSE(grapph::setContains(sub, sup));
+
+}
