@@ -18,3 +18,7 @@ FetchContent_MakeAvailable(googletest)
 add_executable(graph_test include/Graph.h src/Graph.cpp
         src/GraphTest.cpp)
 target_link_libraries(graph_test gtest gtest_main)
+
+add_executable(set_func_test include/SetFunctions.h
+        src/SetFunctionsTest.cpp)
+target_link_libraries(set_func_test gtest gtest_main)
