@@ -1,0 +1,9 @@
+# IDEA workspace
+.idea/
+
+# CMAKE build info
+cmake-build-debug/
+
+# ignore build directories
+bin/
+obj/
