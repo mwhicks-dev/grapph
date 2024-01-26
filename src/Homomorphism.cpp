@@ -109,6 +109,10 @@ namespace grapph {
     }
 
     Homomorphism Homomorphism::compose(Homomorphism first, Homomorphism second) {
+        // Ensure homomorphisms can be composed
+        if ( !first.to.equals(second.from) ) {
+            throw std::invalid_argument("Cannot compose homomorphisms of different graphs -- check order");
+        }
         // Compose vertex homomorphisms
         vfunc_t vertex_map_composition;
         for ( std::pair<vertex_t, vertex_t> mapping : first.getVertexHomomorphism() ) {
