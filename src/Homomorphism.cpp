@@ -115,8 +115,8 @@ namespace grapph {
         }
         // Compose vertex homomorphisms
         vfunc_t vertex_map_composition;
-        for ( std::pair<vertex_t, vertex_t> mapping : first.getVertexHomomorphism() ) {
-            vertex_map_composition[mapping.first] = second.getVertexHomomorphism()[mapping.second];
+        for ( std::pair<vertex_t, vertex_t> mapping : first.getVertexMap() ) {
+            vertex_map_composition[mapping.first] = second.getVertexMap()[mapping.second];
         }
 
         // Create and return composed homomorphism

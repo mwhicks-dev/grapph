@@ -29,8 +29,8 @@ namespace grapph {
         Graph& getFromGraph() { return from; }
         Graph& getToGraph() { return to; }
 
-        vfunc_t getVertexHomomorphism() { return vertex_map; }
-        efunc_t getEdgeHomomorphism() { return edge_map; }
+        vfunc_t getVertexMap() { return vertex_map; }
+        efunc_t getEdgeMap() { return edge_map; }
 
         bool isInjective();
         bool isSurjective();
