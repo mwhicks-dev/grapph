@@ -22,8 +22,15 @@ namespace grapph {
             vertex_range.insert(mapping.second);
         }
         for ( std::pair<edge_t, edge_t> mapping : edge_map ) {
+            // First, ensure both edges ordered
+            if ( mapping.first.first > mapping.first.second ) {
+                mapping.first = { mapping.first.second, mapping.first.first };
+            }
+            if ( mapping.second.first > mapping.second.second ) {
+                mapping.second = { mapping.second.second, mapping.second.first };
+            }
             edge_domain.insert(mapping.first);
-            edge_domain.insert(mapping.second);
+            edge_range.insert(mapping.second);
         }
 
         // Verify that domains and ranges are appropriate
@@ -37,7 +44,7 @@ namespace grapph {
             throw std::invalid_argument("Vertex homomorphism maps to vertex not in to-vertices");
         }
         if ( !setContains(edge_range_superset_expected, edge_range) ) {
-            throw std::invalid_argument("Edge homomorphism maps to vertex not in to-edges");
+            throw std::invalid_argument("Edge homomorphism maps to edge not in to-edges");
         }
 
         // Verify homomorphism constraint - f_E(uv) = (f_V(u), f_E(v))
