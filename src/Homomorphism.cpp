@@ -59,8 +59,18 @@ namespace grapph {
         }
     }
 
-    Homomorphism::Homomorphism(Graph& from, Graph& to, vfunc_t vertex_map, efunc_t edge_map)
-            : from(from), to(to), vertex_map(vertex_map), edge_map(edge_map) {
+    Homomorphism::Homomorphism(Graph& from, Graph& to, vfunc_t vertex_map)
+            : from(from), to(to), vertex_map(vertex_map), edge_map() {
+        for ( edge_t edge : from.getEdges() ) {
+            edge_t mapped_edge = { vertex_map[edge.first], vertex_map[edge.second] };
+            if ( mapped_edge.first > mapped_edge.second ) {
+                vertex_t temp = mapped_edge.first;
+                mapped_edge.first = mapped_edge.second;
+                mapped_edge.second = temp;
+            }
+            edge_map[edge] = mapped_edge;
+        }
+
         validate();
     }
 

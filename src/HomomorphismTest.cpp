@@ -12,14 +12,8 @@ TEST(HomomorphismTest, Homomorphism1) {
     // Create vertex map from s4 to triangle
     grapph::vfunc_t v_map = { { 0, 0 }, { 1, 1 }, { 2, 2 }, { 3, 0 }, { 4, 2 } };
 
-    // Construct edge map
-    grapph::efunc_t e_map;
-    for ( grapph::edge_t edge : pentagon.getEdges() ) {
-        e_map[edge] = { v_map[edge.first], v_map[edge.second] };
-    }
-
     // Construct homomorphism
-    ASSERT_NO_THROW(grapph::Homomorphism hmm(pentagon, triangle, v_map, e_map));
+    ASSERT_NO_THROW(grapph::Homomorphism hmm(pentagon, triangle, v_map));
 }
 
 TEST(HomomorphismTest, Homomorphism2) {
@@ -31,12 +25,6 @@ TEST(HomomorphismTest, Homomorphism2) {
     // Next, create vertex map for which no homomorphism may exist
     grapph::vfunc_t v_map = { { 0, 0 }, { 1, 0 }, { 2, 1 }, { 3, 2 }, { 4, 1 } };
 
-    // Construct edge map
-    grapph::efunc_t e_map;
-    for ( grapph::edge_t edge : pentagon.getEdges() ) {
-        e_map[edge] = { v_map[edge.first], v_map[edge.second] };
-    }
-
     // Construct homomorphism (should fail)
-    ASSERT_THROW(grapph::Homomorphism hmm(pentagon, triangle, v_map, e_map), std::invalid_argument);
+    ASSERT_THROW(grapph::Homomorphism hmm(pentagon, triangle, v_map), std::invalid_argument);
 }

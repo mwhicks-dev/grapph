@@ -24,7 +24,7 @@ namespace grapph {
 
     public:
 
-        Homomorphism(Graph&, Graph&, vfunc_t, efunc_t);
+        Homomorphism(Graph&, Graph&, vfunc_t);
 
         Graph& getFromGraph() { return from; }
         Graph& getToGraph() { return to; }
