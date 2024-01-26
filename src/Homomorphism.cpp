@@ -12,15 +12,35 @@ namespace grapph {
         std::set<vertex_t> vertex_range_superset_expected = to.getVertices();
         std::set<edge_t> edge_range_superset_expected = to.getEdges();
 
-        // Build homomorphism domains/ranges
         std::set<vertex_t> vertex_domain;
         std::set<vertex_t> vertex_range;
         std::set<edge_t> edge_domain;
         std::set<edge_t> edge_range;
+
+        // Validate vertex mapping
         for ( std::pair<vertex_t, vertex_t> mapping : vertex_map ) {
             vertex_domain.insert(mapping.first);
             vertex_range.insert(mapping.second);
         }
+        if ( !setEquals(vertex_domain_expected, vertex_domain) ) {
+            throw std::invalid_argument("Vertex homomorphism does not map every from-vertex");
+        }
+        if ( !setContains(vertex_range_superset_expected, vertex_range) ) {
+            throw std::invalid_argument("Vertex homomorphism maps to vertex not in to-vertices");
+        }
+
+        // Construct edge mapping
+        for ( edge_t edge : from.getEdges() ) {
+            edge_t mapped_edge = { vertex_map[edge.first], vertex_map[edge.second] };
+            if ( mapped_edge.first > mapped_edge.second ) {
+                vertex_t temp = mapped_edge.first;
+                mapped_edge.first = mapped_edge.second;
+                mapped_edge.second = temp;
+            }
+            edge_map[edge] = mapped_edge;
+        }
+
+        // Validate edge mapping
         for ( std::pair<edge_t, edge_t> mapping : edge_map ) {
             // First, ensure both edges ordered
             if ( mapping.first.first > mapping.first.second ) {
@@ -33,44 +53,16 @@ namespace grapph {
             edge_range.insert(mapping.second);
         }
 
-        // Verify that domains and ranges are appropriate
-        if ( !setEquals(vertex_domain_expected, vertex_domain) ) {
-            throw std::invalid_argument("Vertex homomorphism does not map every from-vertex");
-        }
         if ( !setEquals(edge_domain_expected, edge_domain) ) {
             throw std::invalid_argument("Edge homomorphism does not map every from-edge");
         }
-        if ( !setContains(vertex_range_superset_expected, vertex_range) ) {
-            throw std::invalid_argument("Vertex homomorphism maps to vertex not in to-vertices");
-        }
         if ( !setContains(edge_range_superset_expected, edge_range) ) {
             throw std::invalid_argument("Edge homomorphism maps to edge not in to-edges");
-        }
-
-        // Verify homomorphism constraint - f_E(uv) = (f_V(u), f_E(v))
-        for ( std::pair<edge_t, edge_t> mapping : edge_map ) {
-            if ( mapping.second.first != vertex_map[mapping.first.first]
-                    || mapping.second.second != vertex_map[mapping.first.second] ) {
-                std::stringstream ss;
-                ss << "Failed homomorphism constraint - f_E(uv) = (f_V(u), f_E(v)) "
-                    << "for u = " << mapping.first.first << " & v = " << mapping.first.second;
-                throw std::invalid_argument(ss.str());
-            }
         }
     }
 
     Homomorphism::Homomorphism(Graph& from, Graph& to, vfunc_t vertex_map)
             : from(from), to(to), vertex_map(vertex_map), edge_map() {
-        for ( edge_t edge : from.getEdges() ) {
-            edge_t mapped_edge = { vertex_map[edge.first], vertex_map[edge.second] };
-            if ( mapped_edge.first > mapped_edge.second ) {
-                vertex_t temp = mapped_edge.first;
-                mapped_edge.first = mapped_edge.second;
-                mapped_edge.second = temp;
-            }
-            edge_map[edge] = mapped_edge;
-        }
-
         validate();
     }
 
@@ -123,15 +115,9 @@ namespace grapph {
             vertex_map_composition[mapping.first] = second.getVertexHomomorphism()[mapping.second];
         }
 
-        // Compose edge homomorphisms
-        efunc_t edge_map_composition;
-        for ( std::pair<edge_t, edge_t> mapping : first.getEdgeHomomorphism() ) {
-            edge_map_composition[mapping.first] = second.getEdgeHomomorphism()[mapping.second];
-        }
-
         // Create and return composed homomorphism
         Homomorphism composed = Homomorphism(first.getFromGraph(), second.getToGraph(),
-                                             vertex_map_composition, edge_map_composition);
+                                             vertex_map_composition);
         return composed;
     }
 
