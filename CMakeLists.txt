@@ -22,3 +22,8 @@ target_link_libraries(graph_test gtest gtest_main)
 add_executable(set_func_test include/SetFunctions.h
         src/SetFunctionsTest.cpp)
 target_link_libraries(set_func_test gtest gtest_main)
+
+add_executable(homomorphism_test include/Homomorphism.h src/Homomorphism.cpp
+        include/Graph.h src/Graph.cpp
+        src/HomomorphismTest.cpp)
+target_link_libraries(homomorphism_test gtest gtest_main)
