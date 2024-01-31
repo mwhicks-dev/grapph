@@ -31,6 +31,10 @@ namespace grapph {
 
         FeatureGraph() = default;
         FeatureGraph(std::vector<std::pair<vertex_t, T>>, std::set<edge_t>);
+        FeatureGraph(std::vector<std::pair<vertex_t, T>>, std::vector<std::pair<edge_t, long int>>);
+        FeatureGraph(std::set<vertex_t>, std::set<edge_t>, T (*)(vertex_t), long int);
+        FeatureGraph(std::set<vertex_t>, std::vector<std::pair<edge_t, long int>>, T (*)(vertex_t));
+        FeatureGraph(std::vector<std::pair<vertex_t, T>>, std::set<edge_t>, long int);
 
         vertex_t addVertex() override;
         vertex_t addVertex(vertex_t) override;
