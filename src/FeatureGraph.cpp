@@ -1,6 +1,19 @@
+#include <sstream>
+
 #include "FeatureGraph.h"
 
 namespace grapph {
+
+    template <class T>
+    void FeatureGraph<T>::validate(edge_t edge) {
+        if ( Graph::getEdges().count(edge) == 0
+               || edge_weight.count(edge) == 0 ) {
+            std::stringstream ss;
+            ss << "Edge (" << edge.first << ", " << edge.second
+                << ") not in graph";
+            throw std::invalid_argument(ss.str());
+        }
+    }
 
     template <class T>
     FeatureGraph<T>::FeatureGraph(std::vector<std::pair<vertex_t, T>> vertices, std::set<edge_t> edges)
@@ -123,12 +136,49 @@ namespace grapph {
             if ( neighbor < u ) { incident = { neighbor, u }; }
 
             // Remove edge
-            edge_weight.erase(incident);
+            removeEdge(incident);
         }
 
         // Remove vertex u
         Graph::removeVertex(u);
         vertex_state.erase(u);
+    }
+
+    template <class T>
+    edge_t FeatureGraph<T>::addEdge(vertex_t u, vertex_t w) {
+        return addEdge(u, w, default_weight);
+    }
+
+    template <class T>
+    edge_t FeatureGraph<T>::addEdge(edge_t edge) {
+        return addEdge(edge, default_weight);
+    }
+
+    template <class T>
+    edge_t FeatureGraph<T>::addEdge(vertex_t u, vertex_t w, long weight) {
+        edge_t recent = Graph::addEdge(u, w);
+        edge_weight[recent] = weight;
+        return recent;
+    }
+
+    template <class T>
+    edge_t FeatureGraph<T>::addEdge(edge_t edge, long weight) {
+        edge_t recent = Graph::addEdge(edge);
+        edge_weight[recent] = weight;
+        return recent;
+    }
+
+    template <class T>
+    void FeatureGraph<T>::updateEdge(edge_t edge, long weight) {
+        validate(edge);
+        edge_weight[edge] = weight;
+    }
+
+    template <class T>
+    void FeatureGraph<T>::removeEdge(edge_t edge) {
+        validate(edge);
+        edge_weight.erase(edge);
+        Graph::removeEdge(edge);
     }
 
 }

@@ -18,12 +18,12 @@ namespace grapph {
 
         std::map<vertex_t, std::set<vertex_t>> vertex_neighbors;
 
+    protected:
+
         size_t num_vertices = 0;
         size_t num_edges = 0;
 
         size_t next_vertex = 0;
-
-    protected:
 
         void validate(vertex_t);
 

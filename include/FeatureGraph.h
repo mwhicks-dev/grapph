@@ -19,7 +19,7 @@ namespace grapph {
         T (*state_constructor_function)(vertex_t) = defaultStateConstructor;
 
         static T defaultStateConstructor(vertex_t) {
-            throw std::invalid_argument("No state constructor defined");
+            throw std::logic_error("No state constructor defined");
         }
 
     protected:
