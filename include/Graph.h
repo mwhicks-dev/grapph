@@ -23,6 +23,8 @@ namespace grapph {
 
         size_t next_vertex = 0;
 
+    protected:
+
         void validate(vertex_t);
 
     public:
@@ -30,13 +32,13 @@ namespace grapph {
         Graph() = default;
         Graph(std::set<vertex_t>, std::set<edge_t>);
 
-        vertex_t addVertex();
-        vertex_t addVertex(vertex_t);
-        void removeVertex(vertex_t);
+        virtual vertex_t addVertex();
+        virtual vertex_t addVertex(vertex_t);
+        virtual void removeVertex(vertex_t);
 
-        edge_t addEdge(vertex_t, vertex_t);
-        edge_t addEdge(edge_t);
-        void removeEdge(edge_t);
+        virtual edge_t addEdge(vertex_t, vertex_t);
+        virtual edge_t addEdge(edge_t);
+        virtual void removeEdge(edge_t);
 
         bool adjacent(vertex_t, vertex_t);
         bool incident(vertex_t, edge_t);
