@@ -32,8 +32,11 @@ namespace grapph {
 
         vertex_t addVertex();
         vertex_t addVertex(vertex_t);
+        void removeVertex(vertex_t);
+
         edge_t addEdge(vertex_t, vertex_t);
         edge_t addEdge(edge_t);
+        void removeEdge(edge_t);
 
         bool adjacent(vertex_t, vertex_t);
         bool incident(vertex_t, edge_t);
