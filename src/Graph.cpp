@@ -67,6 +67,48 @@ namespace grapph {
         return vertex;
     }
 
+    void Graph::removeVertex(grapph::vertex_t vertex) {
+        // Ensure vertex in vertex set
+        bool fail = true;
+        try {
+            validate(vertex);
+            fail = false;
+        } catch (std::invalid_argument & iae) {
+            // Do nothing
+        }
+        if (fail) {
+            std::stringstream ss;
+            ss << "Vertex "
+                << vertex
+                << " not in graph";
+            throw std::invalid_argument(ss.str().c_str());
+        }
+
+        // For each neighbor of the removed vertex,
+        // update neighbors list and remove edge
+        for ( vertex_t neighbor : getNeighbors(vertex) ) {
+            vertex_neighbors[neighbor].erase(vertex);
+
+            edge_t edge = { vertex, neighbor };
+            if ( neighbor < vertex ) {
+                edge = { neighbor, vertex };
+            }
+            edges.erase(edge);
+            num_edges -= 1;
+        }
+
+        // Remove vertex from vertex set
+        vertices.erase(vertex);
+        num_vertices -= 1;
+
+        // Remove vertex from neighbors matrix
+        vertex_neighbors.erase(vertex);
+
+        // If vertex is one less than next to add, then
+        // allow to be re-added
+        if ( vertex == next_vertex - 1 ) { next_vertex -= 1; }
+    }
+
     edge_t Graph::addEdge(vertex_t first, vertex_t second) {
         return addEdge({first, second});
     }
@@ -96,6 +138,30 @@ namespace grapph {
         vertex_neighbors[edge.second].insert(edge.first);
 
         return edge;
+    }
+
+    void Graph::removeEdge(edge_t edge) {
+        // Order edge
+        if ( edge.second < edge.first ) {
+            edge = { edge.second, edge.first };
+        }
+
+        // Ensure edge in graph
+        if ( edges.count(edge) == 0 ) {
+            std::stringstream ss;
+            ss << "Edge ("
+                << edge.first << ", " << edge.second
+                << ") not in graph";
+            throw std::invalid_argument(ss.str());
+        }
+
+        // Remove edge from graph
+        edges.erase(edge);
+        num_edges -= 1;
+
+        // Remove edge vertices from each others' adjacencies
+        vertex_neighbors[edge.first].erase(edge.second);
+        vertex_neighbors[edge.second].erase(edge.first);
     }
 
     bool Graph::adjacent(vertex_t first, vertex_t second) {
