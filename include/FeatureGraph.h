@@ -8,7 +8,7 @@
 namespace grapph {
 
     template <typename T>
-    class FeatureGraph : Graph {
+    class FeatureGraph : public Graph {
 
     private:
 
