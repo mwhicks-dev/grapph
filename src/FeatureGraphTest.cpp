@@ -271,3 +271,113 @@ TEST(FeatureGraphTest, TestRemoveVertex_1) {
         }
     }
 }
+
+TEST(FeatureGraphTest, TestAddEdge1_1) {
+    // Construct feature graph with two vertices and default edge weight
+    grapph::FeatureGraph<std::string> graph({0, 1}, {}, func, 7);
+
+    // Add new edge between vertices
+    graph.addEdge(0, 1);
+
+    // Assertions
+    ASSERT_EQ(2, graph.getVertices().size());
+    ASSERT_EQ(1, graph.getEdges().size());
+    ASSERT_EQ(7, graph.getEdgeWeight({0, 1}));
+}
+
+TEST(FeatureGraphTest, TestAddEdge1_2) {
+    // Construct feature graph with two vertices
+    grapph::FeatureGraph<std::string> graph({0, 1}, {}, func);
+
+    // Assertions
+    ASSERT_THROW(graph.addEdge(0, 1), std::logic_error);
+}
+
+TEST(FeatureGraphTest, TestAddEdge2_1) {
+    // Construct feature graph with two vertices and default edge weight
+    grapph::FeatureGraph<std::string> graph({0, 1}, {}, func, 7);
+
+    // Add new edge between vertices
+    graph.addEdge({0, 1});
+
+    // Assertions
+    ASSERT_EQ(2, graph.getVertices().size());
+    ASSERT_EQ(1, graph.getEdges().size());
+    ASSERT_EQ(7, graph.getEdgeWeight({0, 1}));
+}
+
+TEST(FeatureGraphTest, TestAddEdge2_2) {
+    // Construct feature graph with two vertices
+    grapph::FeatureGraph<std::string> graph({0, 1}, {}, func);
+
+    // Assertions
+    ASSERT_THROW(graph.addEdge({0, 1}), std::logic_error);
+}
+
+TEST(FeatureGraphTest, TestAddEdge3_1) {
+    // Construct feature graph with two vertices and default edge weight
+    grapph::FeatureGraph<std::string> graph({0, 1}, {}, func);
+
+    // Add new edge between vertices
+    graph.addEdge(0, 1, 7);
+
+    // Assertions
+    ASSERT_EQ(2, graph.getVertices().size());
+    ASSERT_EQ(1, graph.getEdges().size());
+    ASSERT_EQ(7, graph.getEdgeWeight({0, 1}));
+}
+
+TEST(FeatureGraphTest, TestAddEdge4_1) {
+    // Construct feature graph with two vertices and default edge weight
+    grapph::FeatureGraph<std::string> graph({0, 1}, {}, func);
+
+    // Add new edge between vertices
+    graph.addEdge({0, 1}, 7);
+
+    // Assertions
+    ASSERT_EQ(2, graph.getVertices().size());
+    ASSERT_EQ(1, graph.getEdges().size());
+    ASSERT_EQ(7, graph.getEdgeWeight({0, 1}));
+}
+
+TEST(FeatureGraphTest, TestUpdateEdge_1) {
+    // Construct pentagon with tails
+    grapph::FeatureGraph<std::string> graph(
+            {{0, "pentagon"}, {1, "pentagon"}, {2, "pentagon"}, {3, "pentagon"},
+             {4, "pentagon"}, {5, "tail"}, {6, "tail"}},
+            {{{0, 1}, 1}, {{1, 2}, 1}, {{2, 3}, 1}, {{3, 4}, 1},
+             {{4, 0}, 1}, {{3, 5}, 2}, {{4, 6}, 2}}
+    );
+
+    // Update arbitrary edge weight
+    graph.updateEdge({3, 5}, 7);
+
+    // Assertions
+    ASSERT_EQ(7, graph.getVertices().size());
+    ASSERT_EQ(7, graph.getEdges().size());
+    ASSERT_EQ(7, graph.getEdgeWeight({3, 5}));
+}
+
+TEST(FeatureGraphTest, TestRemoveEdge_1) {
+    // Construct pentagon with tails
+    grapph::FeatureGraph<std::string> graph(
+            {{0, "pentagon"}, {1, "pentagon"}, {2, "pentagon"}, {3, "pentagon"},
+             {4, "pentagon"}, {5, "tail"}, {6, "tail"}},
+            {{{0, 1}, 1}, {{1, 2}, 1}, {{2, 3}, 1}, {{3, 4}, 1},
+             {{4, 0}, 1}, {{3, 5}, 2}, {{4, 6}, 2}}
+    );
+
+    // Remove arbitrary edge
+    graph.removeEdge({3, 4});
+
+    // Assertions
+    ASSERT_EQ(6, graph.getEdges().size());
+    ASSERT_EQ(0, graph.getEdges().count({3, 4}));
+    ASSERT_EQ(2, graph.getDegree(0));
+    ASSERT_EQ(2, graph.getDegree(1));
+    ASSERT_EQ(2, graph.getDegree(2));
+    ASSERT_EQ(2, graph.getDegree(3));
+    ASSERT_EQ(2, graph.getDegree(4));
+    ASSERT_EQ(1, graph.getDegree(5));
+    ASSERT_EQ(1, graph.getDegree(6));
+}
