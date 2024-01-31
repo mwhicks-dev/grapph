@@ -80,3 +80,49 @@ TEST(FeatureGraphTest, TestCosntructor4_1) {
     }
 }
 
+TEST(FeatureGraphTest, TestConstructor5_1) {
+    // Construct pentagon with tails
+    std::set<grapph::vertex_t> vertices = {0, 1, 2, 3, 4, 5, 6};
+    grapph::FeatureGraph<std::string> graph(
+            vertices,
+            {{{0, 1}, 1}, {{1, 2}, 1}, {{2, 3}, 1}, {{3, 4}, 1},
+             {{4, 0}, 1}, {{3, 5}, 2}, {{4, 6}, 2}},
+            func
+    );
+
+    // Assertions
+    ASSERT_EQ(7, graph.getVertices().size());
+    ASSERT_EQ(7, graph.getEdges().size());
+    for ( grapph::vertex_t u : graph.getVertices() ) {
+        ASSERT_EQ(func(u), graph.getVertexState(u));
+    }
+    for ( grapph::edge_t edge : graph.getEdges() ) {
+        if ( "tail" == graph.getVertexState(edge.first)
+             || "tail" == graph.getVertexState(edge.second) ) {
+            ASSERT_EQ(2, graph.getEdgeWeight(edge));
+        } else {
+            ASSERT_EQ(1, graph.getEdgeWeight(edge));
+        }
+    }
+}
+
+TEST(FeatureGraphTest, TestConstructor6_1) {
+    // Construct pentagon with tails
+    grapph::FeatureGraph<std::string> graph(
+            {{0, "pentagon"}, {1, "pentagon"}, {2, "pentagon"}, {3, "pentagon"},
+             {4, "pentagon"}, {5, "tail"}, {6, "tail"}},
+            { {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 0}, {3, 5}, {4, 6} },
+            7
+    );
+
+    // Assertions
+    for ( size_t i = 0; i < 5; i++ ) {
+        ASSERT_EQ("pentagon", graph.getVertexState(i));
+    }
+    for ( size_t i = 5; i < 7; i++ ) {
+        ASSERT_EQ("tail", graph.getVertexState(i));
+    }
+    for ( grapph::edge_t uw : graph.getEdges() ) {
+        ASSERT_EQ(7, graph.getEdgeWeight(uw));
+    }
+}
