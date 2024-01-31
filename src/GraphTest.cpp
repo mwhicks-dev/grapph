@@ -362,6 +362,7 @@ TEST(GraphTest, TestRemoveVertex1) {
     pentagon_with_tails.removeVertex(3);
 
     // Assertions
+    ASSERT_EQ(6, pentagon_with_tails.getVertices().size());
     ASSERT_EQ(4, pentagon_with_tails.getEdges().size());
     ASSERT_EQ(2, pentagon_with_tails.getDegree(0));
     ASSERT_EQ(2, pentagon_with_tails.getDegree(1));
@@ -385,6 +386,7 @@ TEST(GraphTest, TestRemoveVertex2) {
     pentagon_with_tails.removeVertex(6);
 
     // Assertions
+    ASSERT_EQ(6, pentagon_with_tails.getVertices().size());
     ASSERT_EQ(6, pentagon_with_tails.getEdges().size());
     ASSERT_EQ(2, pentagon_with_tails.getDegree(0));
     ASSERT_EQ(2, pentagon_with_tails.getDegree(1));
@@ -411,6 +413,7 @@ TEST(GraphTest, TestRemoveEdge1) {
 
     // Assertions
     ASSERT_EQ(6, pentagon_with_tails.getEdges().size());
+    ASSERT_EQ(0, pentagon_with_tails.getEdges().count({3, 4}));
     ASSERT_EQ(2, pentagon_with_tails.getDegree(0));
     ASSERT_EQ(2, pentagon_with_tails.getDegree(1));
     ASSERT_EQ(2, pentagon_with_tails.getDegree(2));
