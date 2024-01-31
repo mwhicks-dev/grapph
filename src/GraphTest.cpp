@@ -350,3 +350,76 @@ TEST(GraphTest, TestInvariants) {
     ASSERT_FALSE(grapph::Graph::isInvariant<size_t>(iso_pwt, chord_pwt, count_edges));
     ASSERT_FALSE(grapph::Graph::isInvariant<bool>(iso_pwt, chord_pwt, contains_triangle));
 }
+
+TEST(GraphTest, TestRemoveVertex1) {
+    // Initialize graph
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2, 3, 4, 5, 6 };
+    std::set<grapph::edge_t> edges = { {0, 1}, {1, 2}, {2, 3},
+                                       {3, 4}, {4, 0}, {3, 5}, {4, 6} };
+    grapph::Graph pentagon_with_tails(vertices, edges);
+
+    // Remove vertex neighboring tail
+    pentagon_with_tails.removeVertex(3);
+
+    // Assertions
+    ASSERT_EQ(4, pentagon_with_tails.getEdges().size());
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(0));
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(1));
+    ASSERT_EQ(1, pentagon_with_tails.getDegree(2));
+    ASSERT_THROW(pentagon_with_tails.getDegree(3), std::invalid_argument);
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(4));
+    ASSERT_EQ(0, pentagon_with_tails.getDegree(5));
+    ASSERT_EQ(1, pentagon_with_tails.getDegree(6));
+    ASSERT_EQ(7, pentagon_with_tails.addVertex());
+}
+
+TEST(GraphTest, TestRemoveVertex2) {
+    // Initialize graph
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2, 3, 4, 5, 6 };
+    std::set<grapph::edge_t> edges = { {0, 1}, {1, 2}, {2, 3},
+                                       {3, 4}, {4, 0}, {3, 5}, {4, 6} };
+    grapph::Graph pentagon_with_tails(vertices, edges);
+    grapph::Graph copy = pentagon_with_tails;
+
+    // Remove last vertex in sequence
+    pentagon_with_tails.removeVertex(6);
+
+    // Assertions
+    ASSERT_EQ(6, pentagon_with_tails.getEdges().size());
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(0));
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(1));
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(2));
+    ASSERT_EQ(3, pentagon_with_tails.getDegree(3));
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(4));
+    ASSERT_EQ(1, pentagon_with_tails.getDegree(5));
+    ASSERT_THROW(pentagon_with_tails.getDegree(6), std::invalid_argument);
+    ASSERT_EQ(6, pentagon_with_tails.addVertex());
+    ASSERT_TRUE(copy.contains(pentagon_with_tails));
+    ASSERT_FALSE(copy.equals(pentagon_with_tails));
+}
+
+TEST(GraphTest, TestRemoveEdge1) {
+    // Initialize graph
+    std::set<grapph::vertex_t> vertices = { 0, 1, 2, 3, 4, 5, 6 };
+    std::set<grapph::edge_t> edges = { {0, 1}, {1, 2}, {2, 3},
+                                       {3, 4}, {4, 0}, {3, 5}, {4, 6} };
+    grapph::Graph pentagon_with_tails(vertices, edges);
+    grapph::Graph copy = pentagon_with_tails;
+
+    // Remove some edge in sequence
+    pentagon_with_tails.removeEdge({3, 4});
+
+    // Assertions
+    ASSERT_EQ(6, pentagon_with_tails.getEdges().size());
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(0));
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(1));
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(2));
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(3));
+    ASSERT_EQ(2, pentagon_with_tails.getDegree(4));
+    ASSERT_EQ(1, pentagon_with_tails.getDegree(5));
+    ASSERT_EQ(1, pentagon_with_tails.getDegree(6));
+    ASSERT_TRUE(copy.contains(pentagon_with_tails));
+    ASSERT_FALSE(copy.equals(pentagon_with_tails));
+}
+
+
