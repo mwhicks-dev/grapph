@@ -4,10 +4,10 @@
 
 namespace grapph {
 
-    template <class T>
-    void FeatureGraph<T>::validate(edge_t edge) {
+    template <class V, class E>
+    void FeatureGraph<V, E>::validate(edge_t edge) {
         if ( Graph::getEdges().count(edge) == 0
-               || edge_weight.count(edge) == 0 ) {
+               || edge_state.count(edge) == 0 ) {
             std::stringstream ss;
             ss << "Edge (" << edge.first << ", " << edge.second
                 << ") not in graph";
@@ -15,120 +15,55 @@ namespace grapph {
         }
     }
 
-    template <class T>
-    FeatureGraph<T>::FeatureGraph(std::vector<std::pair<vertex_t, T>> vertices, std::set<edge_t> edges)
+    template <class V, class E>
+    FeatureGraph<V, E>::FeatureGraph(std::vector<std::pair<vertex_t, V>> vertices, std::vector<std::pair<edge_t, E>> edges)
     : Graph() {
         // Add each vertex
-        for ( std::pair<vertex_t, T> pair : vertices ) {
+        for ( std::pair<vertex_t, V> pair : vertices ) {
             addVertex(pair.first, pair.second);
         }
 
         // Add each edge
-        for ( edge_t edge : edges ) {
-            addEdge(edge);
-        }
-    }
-
-    template <class T>
-    FeatureGraph<T>::FeatureGraph(std::vector<std::pair<vertex_t, T>> vertices,
-                                  std::vector<std::pair<edge_t, long int>> edges) {
-        // Add each vertex
-        for ( std::pair<vertex_t, T> pair : vertices ) {
-            addVertex(pair.first, pair.second);
-        }
-
-        // Add each edge
-        for ( std::pair<edge_t, long int> pair : edges ) {
+        for ( std::pair<edge_t, E> pair : edges ) {
             addEdge(pair.first, pair.second);
         }
+
     }
 
-    template <class T>
-    FeatureGraph<T>::FeatureGraph(std::set<vertex_t> vertices, std::set<edge_t> edges,
-                                  T (*state_constructor)(vertex_t), long int default_weight) {
-        // Set defaults
-        setStateConstructor(state_constructor);
-        setDefaultWeight(default_weight);
-
-        // Add each vertex
-        for ( vertex_t vertex : vertices ) {
-            addVertex(vertex);
-        }
-
-        // Add each edge
-        for ( edge_t edge : edges ) {
-            addEdge(edge);
-        }
-    }
-
-    template <class T>
-    FeatureGraph<T>::FeatureGraph(std::set<vertex_t> vertices, std::vector<std::pair<edge_t, long int>> edges,
-                                  T (*state_constructor)(vertex_t)) {
-        // Set default
-        setStateConstructor(state_constructor);
-
-        // Add each vertex
-        for ( vertex_t vertex : vertices ) {
-            addVertex(vertex);
-        }
-
-        // Add each edge
-        for ( std::pair<edge_t, long> pair : edges ) {
-            addEdge(pair.first, pair.second);
-        }
-    }
-
-    template <class T>
-    FeatureGraph<T>::FeatureGraph(std::vector<std::pair<vertex_t, T>> vertices, std::set<edge_t> edges,
-                                  long int default_weight) {
-        // Set default
-        setDefaultWeight(default_weight);
-
-        // Add each vertex
-        for ( std::pair<vertex_t, T> pair : vertices ) {
-            addVertex(pair.first, pair.second);
-        }
-
-        // Add each edge
-        for ( edge_t edge : edges ) {
-            addEdge(edge);
-        }
-    }
-
-    template <class T>
-    vertex_t FeatureGraph<T>::addVertex() {
-        T state = defaultStateConstructor(next_vertex);
+    template <class V, class E>
+    vertex_t FeatureGraph<V, E>::addVertex() {
+        V state = defaultStateConstructor(next_vertex);
         return addVertex(next_vertex, state);
     }
 
-    template <class T>
-    vertex_t FeatureGraph<T>::addVertex(vertex_t u) {
-        T state = defaultStateConstructor(u);
+    template <class V, class E>
+    vertex_t FeatureGraph<V, E>::addVertex(vertex_t u) {
+        V state = defaultStateConstructor(u);
         return addVertex(u, state);
     }
 
-    template <class T>
-    vertex_t FeatureGraph<T>::addVertex(T t) {
+    template <class V, class E>
+    vertex_t FeatureGraph<V, E>::addVertex(V t) {
         vertex_t recent = Graph::addVertex();
         vertex_state[recent] = t;
         return recent;
     }
 
-    template <class T>
-    vertex_t FeatureGraph<T>::addVertex(grapph::vertex_t u, T t) {
+    template <class V, class E>
+    vertex_t FeatureGraph<V, E>::addVertex(grapph::vertex_t u, V t) {
         vertex_t recent = Graph::addVertex(u);
         vertex_state[recent] = t;
         return recent;
     }
 
-    template <class T>
-    void FeatureGraph<T>::updateVertex(vertex_t u, T t) {
+    template <class V, class E>
+    void FeatureGraph<V, E>::updateVertex(vertex_t u, V t) {
         Graph::validate(u);
         vertex_state[u] = t;
     }
 
-    template <class T>
-    void FeatureGraph<T>::removeVertex(grapph::vertex_t u) {
+    template <class V, class E>
+    void FeatureGraph<V, E>::removeVertex(grapph::vertex_t u) {
         // Remove edge weights for edges u is incident to
         for ( vertex_t neighbor : Graph::getNeighbors(u) ) {
             // Get edge
@@ -144,40 +79,49 @@ namespace grapph {
         vertex_state.erase(u);
     }
 
-    template <class T>
-    edge_t FeatureGraph<T>::addEdge(vertex_t u, vertex_t w) {
-        return addEdge(u, w, default_weight);
-    }
-
-    template <class T>
-    edge_t FeatureGraph<T>::addEdge(edge_t edge) {
-        return addEdge(edge, default_weight);
-    }
-
-    template <class T>
-    edge_t FeatureGraph<T>::addEdge(vertex_t u, vertex_t w, long weight) {
+    template <class V, class E>
+    edge_t FeatureGraph<V, E>::addEdge(vertex_t u, vertex_t w) {
         edge_t recent = Graph::addEdge(u, w);
-        edge_weight[recent] = weight;
+        try {
+            edge_state[recent] = edge_auto_state(recent);
+        } catch ( std::logic_error & e ) {
+            Graph::removeEdge(recent);
+            throw e;  // We need to remove the constructed edge before throwing the error, so we catch and throw again
+        }
+        
         return recent;
     }
 
-    template <class T>
-    edge_t FeatureGraph<T>::addEdge(edge_t edge, long weight) {
+    template <class V, class E>
+    edge_t FeatureGraph<V, E>::addEdge(edge_t edge) {
+        edge_state[edge] = edge_auto_state(edge);
+        Graph::addEdge(edge);
+    }
+
+    template <class V, class E>
+    edge_t FeatureGraph<V, E>::addEdge(vertex_t u, vertex_t w, E state) {
+        edge_t recent = Graph::addEdge(u, w);
+        edge_state[recent] = state;
+        return recent;
+    }
+
+    template <class V, class E>
+    edge_t FeatureGraph<V, E>::addEdge(edge_t edge, E state) {
         edge_t recent = Graph::addEdge(edge);
-        edge_weight[recent] = weight;
+        edge_state[recent] = state;
         return recent;
     }
 
-    template <class T>
-    void FeatureGraph<T>::updateEdge(edge_t edge, long weight) {
+    template <class V, class E>
+    void FeatureGraph<V, E>::updateEdge(edge_t edge, E state) {
         validate(edge);
-        edge_weight[edge] = weight;
+        edge_state[edge] = state;
     }
 
-    template <class T>
-    void FeatureGraph<T>::removeEdge(edge_t edge) {
+    template <class V, class E>
+    void FeatureGraph<V, E>::removeEdge(edge_t edge) {
         validate(edge);
-        edge_weight.erase(edge);
+        edge_state.erase(edge);
         Graph::removeEdge(edge);
     }
 
