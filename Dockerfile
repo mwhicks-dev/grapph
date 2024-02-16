@@ -12,4 +12,4 @@ WORKDIR /grapph
 RUN cmake .
 RUN cmake --build .
 
-ENTRYPOINT ./graph_test && ./set_func_test && ./homomorphism_test
+ENTRYPOINT ./graph_test && ./set_func_test && ./homomorphism_test && ./feature_graph_test
