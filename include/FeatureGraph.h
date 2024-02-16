@@ -18,11 +18,11 @@ namespace grapph {
         V (*vertex_auto_state)(vertex_t) = defaultVertexState;
         E (*edge_auto_state)(edge_t) = defaultEdgeState;
 
-        static V defaultVertexState(vertex_t) {
+        static V defaultVertexState(vertex_t u) {
             throw std::logic_error("No vertex auto state defined");
         }
 
-        static E defaultEdgeState(edge_t) {
+        static E defaultEdgeState(edge_t uw) {
             throw std::logic_error("No edge auto state defined");
         }
 
@@ -67,9 +67,7 @@ namespace grapph {
         }
 
         vertex_t addVertex(V t) {
-            vertex_t recent = Graph::addVertex();
-            vertex_state[recent] = t;
-            return recent;
+            return addVertex(next_vertex, t);
         }
 
         vertex_t addVertex(vertex_t u, V t) {
@@ -117,9 +115,7 @@ namespace grapph {
         }
 
         edge_t addEdge(vertex_t u, vertex_t w, E state) {
-            edge_t recent = Graph::addEdge(u, w);
-            edge_state[recent] = state;
-            return recent;
+            return addEdge({u, w}, state);
         }
 
         edge_t addEdge(edge_t edge, E state) {
