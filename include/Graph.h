@@ -18,6 +18,8 @@ namespace grapph {
 
         std::map<vertex_t, std::set<vertex_t>> vertex_neighbors;
 
+    protected:
+
         size_t num_vertices = 0;
         size_t num_edges = 0;
 
@@ -30,10 +32,13 @@ namespace grapph {
         Graph() = default;
         Graph(std::set<vertex_t>, std::set<edge_t>);
 
-        vertex_t addVertex();
-        vertex_t addVertex(vertex_t);
-        edge_t addEdge(vertex_t, vertex_t);
-        edge_t addEdge(edge_t);
+        virtual vertex_t addVertex();
+        virtual vertex_t addVertex(vertex_t);
+        virtual void removeVertex(vertex_t);
+
+        virtual edge_t addEdge(vertex_t, vertex_t);
+        virtual edge_t addEdge(edge_t);
+        virtual void removeEdge(edge_t);
 
         bool adjacent(vertex_t, vertex_t);
         bool incident(vertex_t, edge_t);

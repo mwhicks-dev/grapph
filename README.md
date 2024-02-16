@@ -4,9 +4,20 @@ C++ graph encoding library. Feel free to put feature requests or bug reports you
 
 ## build instructions
 
-Testing done via CMake; to build, just use Makefile. Only `build-essential` required to build on Linux.
+### Libary Build
 
-For Linux build, use Makefile build targets: `make clean lib`.
+Use the specified Makefile for this: `make clean lib`
 
-Compiled library will be in `bin/`. You should be able to use this like any other library.
+This library is written strictly in C++ STL, so all you will need is `build-essential` or your OS equivalent.
 
+### Testing Build
+
+Docker:
+
+```
+docker build -t grapph_test .
+
+docker run grapph_test
+```
+
+This isn't done with testing because I think CMake is kind of ugly looking, so you'll need to redo this every time you want to test. Just change the Dockerfile to test against your relevant specs and stuff, which might be different from your system.
