@@ -32,13 +32,13 @@ namespace grapph {
 
     template <class V, class E>
     vertex_t FeatureGraph<V, E>::addVertex() {
-        V state = defaultStateConstructor(next_vertex);
+        V state = vertex_auto_state(next_vertex);
         return addVertex(next_vertex, state);
     }
 
     template <class V, class E>
     vertex_t FeatureGraph<V, E>::addVertex(vertex_t u) {
-        V state = defaultStateConstructor(u);
+        V state = vertex_auto_state(u);
         return addVertex(u, state);
     }
 
@@ -95,7 +95,7 @@ namespace grapph {
     template <class V, class E>
     edge_t FeatureGraph<V, E>::addEdge(edge_t edge) {
         edge_state[edge] = edge_auto_state(edge);
-        Graph::addEdge(edge);
+        return Graph::addEdge(edge);
     }
 
     template <class V, class E>

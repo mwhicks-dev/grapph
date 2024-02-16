@@ -28,8 +28,8 @@ add_executable(homomorphism_test include/Homomorphism.h src/Homomorphism.cpp
         src/HomomorphismTest.cpp)
 target_link_libraries(homomorphism_test gtest gtest_main)
 
-#add_executable(feature_graph_test include/FeatureGraph.h
-#        include/Graph.h src/Graph.cpp
-#        src/FeatureGraphTest.cpp
-#        src/FeatureGraph.cpp)
-#target_link_libraries(feature_graph_test gtest gtest_main)
+add_executable(feature_graph_test include/FeatureGraph.h
+        include/Graph.h src/Graph.cpp
+        src/FeatureGraphTest.cpp
+        src/FeatureGraph.cpp)
+target_link_libraries(feature_graph_test gtest gtest_main)
