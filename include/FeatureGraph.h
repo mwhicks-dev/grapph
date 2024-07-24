@@ -2,6 +2,7 @@
 #define GRAPPH_FEATUREGRAPH_H
 
 #include <vector>
+#include <sstream>
 
 #include "Graph.h"
 
