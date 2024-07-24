@@ -1,10 +1,10 @@
 CCC = g++ -std=c++17
-CFLAGS = -Wall -g -fPIC -I./include
-CCFLAGS = -shared
+CFLAGS = -Wall -g -I./include
+CCFLAGS = -static
 DFLAGS =
 
 LIB_NAME = libgrapph
-LIB_VERSION = 2.0.1
+LIB_VERSION = 2.0.2
 
 SRC_FOLDER = src
 OBJ_FOLDER = obj
@@ -15,7 +15,7 @@ ALL_OBJS = $(foreach obj, $(ALL_NAMES), $(OBJ_FOLDER)/$(obj))
 
 lib: setup $(ALL_OBJS)
 	$(info -> compiling libgrapph)
-	$(CCC) $(CFLAGS) $(CCFLAGS) -o $(BIN_FOLDER)/$(LIB_NAME)_$(LIB_VERSION).a $(ALL_OBJS)
+	ar rcs $(BIN_FOLDER)/$(LIB_NAME)_$(LIB_VERSION).a $(ALL_OBJS)
 
 setup:
 	mkdir -p $(BIN_FOLDER) $(OBJ_FOLDER)
