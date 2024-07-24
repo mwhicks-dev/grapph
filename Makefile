@@ -1,10 +1,10 @@
-CCC = g++
+CCC = g++ -std=c++17
 CFLAGS = -Wall -g -fPIC -I./include
 CCFLAGS = -shared
 DFLAGS =
 
 LIB_NAME = libgrapph
-LIB_VERSION = 2.0.0
+LIB_VERSION = 2.0.1
 
 SRC_FOLDER = src
 OBJ_FOLDER = obj
