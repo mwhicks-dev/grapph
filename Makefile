@@ -4,7 +4,7 @@ CCFLAGS = -static
 DFLAGS =
 
 LIB_NAME = libgrapph
-LIB_VERSION = 2.0.2
+LIB_VERSION = 2.0.3
 
 SRC_FOLDER = src
 OBJ_FOLDER = obj

@@ -1,5 +1,6 @@
 # IDEA workspace
 .idea/
+.vscode/
 
 # CMAKE build info
 cmake-build-debug/
